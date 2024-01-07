@@ -13,7 +13,7 @@ import javax.swing.WindowConstants.DISPOSE_ON_CLOSE
 import javax.swing.table.DefaultTableModel
 
 class BlogManager(val file: File) {
-    val basedir = file.parentFile.canonicalPath
+    val basedir = file.parent
     val index = Gson().fromJson(file.readText(), Index::class.java)
 
     val w = JFrame("Blog Manager [${file.canonicalPath}] - GitBlogger")

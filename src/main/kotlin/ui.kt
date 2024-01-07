@@ -9,7 +9,10 @@ import java.awt.Dimension
 import java.awt.Toolkit
 import java.awt.Window
 import java.awt.event.ActionListener
+import java.util.*
 import javax.swing.*
+import javax.swing.event.DocumentEvent
+import javax.swing.event.DocumentListener
 import javax.swing.filechooser.FileFilter
 
 
@@ -145,9 +148,34 @@ fun <T : Component> BindWidth(parent: Component, component: T): T {
 }
 
 fun ExceptionDialog(e: Exception, w: Window? = null) {
+    val stackTrace = e.stackTraceToString()
+    println(stackTrace)
+
     val textPane = JTextPane()
     textPane.isEditable = false
-    textPane.text = e.stackTraceToString()
+    textPane.text = stackTrace
     JOptionPane.showMessageDialog(w, JScrollPane(textPane), "Error", JOptionPane.ERROR_MESSAGE)
-    println(textPane.text)
+}
+
+fun <E> UpdateListModel(a: Vector<E>, m: DefaultListModel<E>) {
+    m.removeAllElements()
+    for (e in a) {
+        m.addElement(e)
+    }
+}
+
+fun NewDocumentListener(a: ActionListener): DocumentListener {
+    return object : DocumentListener {
+        override fun insertUpdate(p0: DocumentEvent?) {
+            a.actionPerformed(null)
+        }
+
+        override fun removeUpdate(p0: DocumentEvent?) {
+            a.actionPerformed(null)
+        }
+
+        override fun changedUpdate(p0: DocumentEvent?) {
+            a.actionPerformed(null)
+        }
+    }
 }

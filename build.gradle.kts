@@ -4,6 +4,7 @@
 
 plugins {
     kotlin("jvm") version "1.9.21"
+    id("com.github.johnrengelman.shadow") version "5.0.0"
 }
 
 group = "com.github.jellytea.gitblogger"
@@ -22,6 +23,25 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.jar {
+    manifest {
+        attributes(Pair("Main-Class", "com.github.jellytea.gitblogger.MainKt"))
+        attributes(
+            Pair("Class-Path", configurations
+                .runtimeClasspath
+                .get()
+                .joinToString(separator = " ") { file ->
+                    "libs/${file.name}"
+                })
+        )
+    }
+}
+
+tasks.shadowJar {
+    mergeServiceFiles()
+}
+
 kotlin {
     jvmToolchain(8)
 }
