@@ -13,7 +13,7 @@ class Log {
 
     var revision = 0
 
-    var topics = arrayOf<String>()
+    var topics = Vector<String>()
 }
 
 class Index {

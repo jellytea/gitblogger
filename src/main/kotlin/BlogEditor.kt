@@ -53,6 +53,16 @@ class BlogEditor(val blogManager: BlogManager) {
             return
         }
 
+        val topics = HashSet<String>()
+
+        for (topic in topicsField.text.split(" ")) {
+            topics.add(topic)
+        }
+
+        for (topic in topics) {
+            log.topics.addElement(topic)
+        }
+
         log.title = w.title
 
         var finalMarkdown = StringBuffer()

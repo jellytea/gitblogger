@@ -20,7 +20,7 @@ class BlogManager(val file: File) {
     val listModel = DefaultListModel<String>()
     val listView = JList(listModel)
     val detailView = JTable()
-    val markdownView = JTextPane()
+    val htmlView = JTextPane()
 
     fun publish(log: Log) {
         log.publishTime = Instant.now().epochSecond
@@ -45,16 +45,18 @@ class BlogManager(val file: File) {
         model.addRow(arrayOf("Title", log.title))
         var str = ""
         for (topic in log.topics) {
-            str += "$topic, "
+            str += "$topic "
         }
         model.addRow(arrayOf("Topics", str))
 
         detailView.model = model
 
-        markdownView.text = Markdown2Html(File("$basedir/$i/content.md").readText())
+        htmlView.text = Markdown2Html(File("$basedir/$i/content.md").readText())
     }
 
     init {
+        htmlView.contentType = "text/html"
+
         for (log in index.logs.reversed()) {
             listModel.addElement(log.title)
         }
@@ -67,7 +69,17 @@ class BlogManager(val file: File) {
             )
         )
 
-        w.add(JSplitPane(JSplitPane.HORIZONTAL_SPLIT, JScrollPane(listView), JScrollPane(detailView)))
+        w.add(
+            JSplitPane(
+                JSplitPane.HORIZONTAL_SPLIT,
+                JScrollPane(listView),
+                JSplitPane(
+                    JSplitPane.VERTICAL_SPLIT,
+                    JScrollPane(detailView),
+                    JScrollPane(htmlView),
+                ),
+            )
+        )
 
         listView.addListSelectionListener { updateDetailView() }
 
