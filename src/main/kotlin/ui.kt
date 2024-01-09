@@ -157,7 +157,7 @@ fun ExceptionDialog(e: Exception, w: Window? = null) {
     JOptionPane.showMessageDialog(w, JScrollPane(textPane), "Error", JOptionPane.ERROR_MESSAGE)
 }
 
-fun <E> UpdateListModel(a: Vector<E>, m: DefaultListModel<E>) {
+fun <E> UpdateListModel(a: List<E>, m: DefaultListModel<E>) {
     m.removeAllElements()
     for (e in a) {
         m.addElement(e)

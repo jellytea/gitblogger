@@ -6,6 +6,7 @@ package com.github.jellytea.gitblogger
 
 import com.google.gson.Gson
 import java.awt.Dimension
+import java.awt.Font
 import java.io.File
 import java.time.Instant
 import javax.swing.*
@@ -51,11 +52,20 @@ class BlogManager(val file: File) {
 
         detailView.model = model
 
-        htmlView.text = Markdown2Html(File("$basedir/$i/content.md").readText())
+        val text = StringBuffer()
+
+        for (line in File("$basedir/$i/content.md").readText().lines()) {
+            text.appendLine(line.replace("file:", "file:$basedir/$i/"))
+        }
+
+        htmlView.text = Markdown2Html(text.toString())
     }
 
     init {
         htmlView.contentType = "text/html"
+        htmlView.isEditable = false
+        htmlView.font = Font("Noto Sans", Font.PLAIN, 17)
+        htmlView.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true)
 
         for (log in index.logs.reversed()) {
             listModel.addElement(log.title)

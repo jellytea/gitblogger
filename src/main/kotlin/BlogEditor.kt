@@ -20,7 +20,7 @@ class BlogEditor(val blogManager: BlogManager) {
     val index = blogManager.index
     val log = Log()
 
-    val attachments = Vector<String>()
+    val attachments = HashSet<String>()
 
     val w = JFrame()
     val markdownEditor = JTextArea()
@@ -70,7 +70,7 @@ class BlogEditor(val blogManager: BlogManager) {
         for (line in markdownEditor.text.lines()) {
             val url = line.substringAfter("file:", "").substringBefore(')').substringBefore('"')
             if (url.isNotEmpty()) {
-                finalMarkdown.appendLine(line.replace("file:$url", Path(url).fileName.toString()))
+                finalMarkdown.appendLine(line.replace(url, Path(url).fileName.toString()))
             } else {
                 finalMarkdown.appendLine(line)
             }
@@ -92,17 +92,17 @@ class BlogEditor(val blogManager: BlogManager) {
     }
 
     fun scanAttachments() {
-        attachments.removeAllElements()
+        attachments.clear()
         for (line in markdownEditor.text.lines()) {
             val url = line.substringAfter("file:", "").substringBefore(')').substringBefore('"')
             if (Files.notExists(Path(url)) || Files.isDirectory(Path(url))) {
                 continue
             }
             if (url.isNotEmpty()) {
-                attachments.addElement(url)
+                attachments.add(url)
             }
         }
-        UpdateListModel(attachments, attachmentsModel)
+        UpdateListModel(attachments.toList(), attachmentsModel)
     }
 
     fun attachLocalImage() {
