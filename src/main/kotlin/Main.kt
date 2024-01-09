@@ -51,7 +51,10 @@ fun main() {
         NewMenu(
             "About",
             NewMenuItem("Author") {
-                MessageDialog("Author", "Copyright (c) 2023-2024 Jelly Tea")
+                MessageDialog("Author", "Copyright (c) 2023-2024 JetERA Creative\n" +
+                        "https://github.com/jetera-creative/gitblogger\n\n" +
+                        "Use of this software and the source code is governed under the MPL v2.0 that can be found at:\n" +
+                        "https://mozilla.org/MPL/2.0/")
             }
         )
     )

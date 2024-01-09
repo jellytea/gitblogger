@@ -19,14 +19,16 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 tasks.jar {
     manifest {
-        attributes(Pair("Main-Class", "com.github.jellytea.gitblogger.MainKt"))
+        attributes["Main-Class"] = "com.github.jellytea.gitblogger.MainKt"
     }
+
+    from(configurations.runtimeClasspath.get().filter { it.endsWith("jar") }.map { zipTree(it) })
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 kotlin {
